@@ -3,7 +3,7 @@
     top:        -50px;
     width:      100%;
     height:     calc(100% + 100px);
-    background: rgba(0, 0, 0, .85);
+    background: rgba(#0A1F38, .7);
     transform:  translateY(-100px);
     opacity:    0;
 
@@ -21,6 +21,10 @@
         justify-content: space-between;
         align-items:     center;
 
+        @media (max-width: 599px) {
+            width: 100%;
+        }
+
         &--action {
             width:           100%;
             display:         flex;
@@ -31,12 +35,20 @@
 
     &__body {
         padding: 0 60px;
+        @media (max-width: 599px) {
+            padding: 0 16px;
+        }
     }
 
     &__title {
         flex-grow:     1;
         padding:       0 60px;
         margin-bottom: 40px;
+        @media (max-width: 599px) {
+            padding: 0 16px;
+            font-size: 32px;
+            margin-bottom: 26px;
+        }
     }
 
     &__block {
@@ -50,13 +62,29 @@
         flex-direction: column;
         padding:        10px 0;
         max-height:     calc(100% - 120px);
+
+        @media (max-width: 599px) {
+            max-height: 100vh;
+            height:     100%;
+            padding:    0 0 20px;
+            margin:     10px 0;
+        }
     }
 
     &__card {
         overflow:      auto;
         background:    $dark-middle;
         border-radius: 40px;
-        padding:       20px;
+        padding:       20px 20px 60px;
+
+        @media (max-width: 599px) {
+            height:          100%;
+            display:         flex;
+            justify-content: center;
+            flex-direction:  column;
+            align-items:     center;
+            padding:         16px;
+        }
     }
 
     &__append {
@@ -71,14 +99,12 @@
             margin-top: 5px;
         }
         &__card {
-            padding: 20px 20px;
         }
         &__title {
             max-width: calc(100% - 25px);
         }
     }
-    @media (max-width: 479px) {
-    }
+
 }
 
 @keyframes show {
