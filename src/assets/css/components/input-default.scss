@@ -36,24 +36,32 @@
         }
     }
 
+    textarea, input {
+        font-family:         "Montserrat", sans-serif;
+        font-optical-sizing: auto;
+        font-style:          normal;
+        font-weight:         400;
+        font-size:           18px;
+        line-height:         156%;
+        background:          none;
+        border:              none;
+
+        outline:             none;
+        padding:             22px 24px;
+        width:               100%;
+        color:               $dark;
+    }
+
     &__input {
-        font-weight: 400;
-        font-size:   18px;
-        line-height: 156%;
-        outline:     none;
-        padding:     22px 24px;
-        width:       100%;
-        background:  none;
-        border:      none;
-        color:       $dark;
 
         &::placeholder {
-            font-weight: 400;
-            font-size:   18px;
-            line-height: 156%;
+            font-weight:         400;
+            font-size:           18px;
+            line-height:         156%;
+            font-family:         "Montserrat", sans-serif;
+            font-optical-sizing: auto;
+            font-style:          normal;
         }
-
-
     }
 
     &__error {
@@ -81,7 +89,6 @@
         right:    28px;
         top:      26px;
     }
-
 
 
     .flex-1 {

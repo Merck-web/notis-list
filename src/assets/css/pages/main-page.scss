@@ -105,4 +105,36 @@
             height: 36px;
         }
     }
+
+    &__add-btn {
+        position:   fixed;
+        bottom:     40px;
+        right:      40px;
+        box-shadow: 0 15px 46px -10px rgba(0, 0, 0, 0.6);
+        @media (max-width: $xs) {
+            right: 8px;
+        }
+    }
+
+    &__add-dialog {
+
+        .text-notice {
+            margin-bottom: 80px;
+
+            textarea {
+                height: 244px;
+                @media (max-width: $md) {
+                    height: 168px;
+                }
+            }
+        }
+
+        @media (max-width: $xs) {
+            .button-default-add {
+                width:           100%;
+                display:         flex;
+                justify-content: center;
+            }
+        }
+    }
 }

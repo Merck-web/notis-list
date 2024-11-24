@@ -24,6 +24,25 @@
                     :type="type"
                     inputmode="numeric"
                     :placeholder="placeholder"
+                    :style="styleInput"
+                    @input="handleInput"
+                    @focus="handleFocus"
+                    @blur="handleBlur"
+                />
+            </div>
+            <div
+                v-else-if="autogrow"
+                class="flex-1"
+            >
+                <textarea
+                    ref="InputDefaultRef"
+                    :value="modelValue"
+                    class="input-default__input"
+                    :class="{ key }"
+                    :inputmode="inputmode"
+                    :placeholder="placeholder"
+                    :maxlength="maxlength"
+                    :style="styleInput"
                     @input="handleInput"
                     @focus="handleFocus"
                     @blur="handleBlur"
@@ -43,10 +62,11 @@
                     :type="type"
                     :inputmode="inputmode"
                     :placeholder="placeholder"
+                    :maxlength="maxlength"
+                    :style="styleInput"
                     @input="handleInput"
                     @focus="handleFocus"
                     @blur="handleBlur"
-                    :maxlength="maxlength"
                 />
             </div>
             
@@ -158,6 +178,14 @@ const props = defineProps({
         type:    String,
         default: '',
     },
+    autogrow: {
+        type: Boolean,
+        default: false,
+    },
+    styleInput: {
+        type: String,
+        default: '',
+    }
 });
 
 const validateError = ref(null);

@@ -148,10 +148,13 @@ a {
 .negative-banner {
     border-radius: 24px;
     padding:       8px 20px;
-    height:        44px;
     background:    rgba(255, 116, 97, 0.1);
-    font-weight:   400;
-    font-size:     18px;
-    line-height:   156%;
-    color:         $negative;
+    flex-wrap:     wrap;
+
+    p {
+        font-weight:   400;
+        font-size:     18px;
+        line-height:   156%;
+        color:         $negative;
+    }
 }

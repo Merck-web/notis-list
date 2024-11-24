@@ -5,11 +5,14 @@ import axios from 'axios';
 export default createStore({
     state:     {
         personalInfo: {},
+        notesList:    [],
     },
     getters:   {
         isAuth: state => Object.keys(state.personalInfo).length,
         
         getPersonalInfo: state => state.personalInfo,
+        
+        getNotesList: state => state.notesList,
     },
     mutations: {
         LOGOUT: (state) => {
@@ -26,6 +29,12 @@ export default createStore({
         SET_PERSONAL_DATA: (state, payload) => {
             state.personalInfo = payload;
         },
+        
+        ADD_IN_NOTES_LIST: (state, payload) => state.notesList.push(payload),
+        
+        SET_NOTES_LIST: (state, payload) => state.notesList = payload,
+        
+        REMOVE_BY_INDEX_NOTES_ITEM: (state, index) => state.notesList.splice(index, 1),
     },
     actions:   {
         setToken({ commit }, token) {
@@ -43,6 +52,7 @@ export default createStore({
                 commit('SET_TOKEN', data?.accessToken || '');
                 
                 dispatch('getInfo');
+                dispatch('getNotes');
                 
                 return data;
             }
@@ -77,6 +87,40 @@ export default createStore({
             }
             catch (error) {
                 console.error(error);
+            }
+        },
+        
+        async getNotes({ commit }) {
+            try {
+                const { data } = await api.getNotes();
+                commit('SET_NOTES_LIST', data);
+                return data;
+            }
+            catch (error) {
+                console.error(error);
+            }
+        },
+        
+        async createNotes({ commit }, payload) {
+            try {
+                const { data } = await api.createNotes({ ...payload });
+                commit('ADD_IN_NOTES_LIST', data);
+                return data;
+            }
+            catch (error) {
+                console.error(error);
+                return { error: error?.response?.data?.message || [] };
+            }
+        },
+        
+        async deleteNotes({ commit }, { id, index }) {
+            try {
+                await api.deleteNotes(id);
+                commit('REMOVE_BY_INDEX_NOTES_ITEM', index);
+            }
+            catch (error) {
+                console.error(error);
+                return { error: error?.response?.data?.message || [] };
             }
         },
         

@@ -22,8 +22,8 @@ function getNotes() {
    return axios.get('/api/notes')
 }
 
-function createNotes() {
-   return axios.post('/api/notes')
+function createNotes(request) {
+   return axios.post('/api/notes', request)
 }
 
 function deleteNotes(id) {

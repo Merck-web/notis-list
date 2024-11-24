@@ -87,11 +87,23 @@
             </div>
         </TransitionDefault>
         
+        <TransitionDefault>
+            <button
+                class="button-default button-default-circle main-page__add-btn"
+                @click="openAddDialog = true"
+            >
+                <img
+                    src="/icons/plus.svg"
+                    alt="Иконка добавления"
+                />
+            </button>
+        </TransitionDefault>
         
         <ModalContainer
             v-model="openModal"
             :title="isNewUser ? 'Регистрация' : 'Вход в ваш аккаунт'"
             width="840px"
+            @close="errorMessage = []"
         >
             <InputDefault
                 v-model="data.email"
@@ -165,10 +177,72 @@
             </div>
             
             <div
-                v-if="errorMessage"
+                v-if="errorMessage.length"
                 class="row negative-banner full-width"
             >
-                {{ errorMessage }}
+                <template
+                    v-for="(item, index) in errorMessage"
+                    :key="index"
+                >
+                    <p>
+                        {{ item }}
+                    </p>
+                    <br/>
+                </template>
+            </div>
+        </ModalContainer>
+        
+        <ModalContainer
+            v-model="openAddDialog"
+            title="Добавление заметки"
+            width="780px"
+            class-name="main-page__add-dialog"
+            @close="errorMessageAdd = []"
+        >
+            <InputDefault
+                v-model="newNotes.title"
+                label="Название заметки"
+                placeholder="Введите название"
+                class="mb-40"
+                counter
+                :maxlength="100"
+                :rules="[ val => !!val || 'Обязательное поле' ]"
+            />
+            
+            <InputDefault
+                v-model="newNotes.content"
+                label="Текст заметки"
+                placeholder="Введите текст"
+                type="text"
+                autogrow
+                counter
+                class="text-notice"
+                :rules="[ val => !!val || 'Обязательное поле' ]"
+            />
+            
+            <div
+                v-if="errorMessageAdd.length"
+                class="row negative-banner full-width mb-md"
+            >
+                <template
+                    v-for="(item, index) in errorMessageAdd"
+                    :key="index"
+                >
+                    <p>
+                        {{ item }}
+                    </p>
+                    <br/>
+                </template>
+            
+            </div>
+            
+            <div class="row justify-end">
+                <button
+                    class="button-default button-default-add"
+                    @click="addNotice"
+                >
+                    Добавить
+                </button>
             </div>
         </ModalContainer>
     </div>
@@ -191,32 +265,23 @@ import NotesCard from '@/components/NotesCard.vue';
 const openModal = ref(false);
 const visiblePassword = ref(false);
 const visiblePasswordConfirm = ref(false);
-const errorMessage = ref('');
+const errorMessage = ref([]);
+const errorMessageAdd = ref([]);
 const registerForm = ref(false);
 const openMenu = ref(false);
+const openAddDialog = ref(false);
 
-const notesList = ref([
-    {
-        title:   'Заголовок',
-        content: 'А также явные признаки победы институционализации могут быть объединены в целые кластеры себе подобных.',
-        id:      1,
-    },
-    {
-        title:   'Пример заголовока заметки в две строчки',
-        content: 'Не следует, однако, забывать, что базовый вектор развития предопределяет высокую востребованность позиций, занимаемых участниками в отношении поставленных задач. Вот вам яркий пример современных тенденций — повышение уровня гражданского сознания требует анализа переосмысления внешнеэкономических политик.',
-        id:      1,
-    },
-    {
-        title:   'Заголовок',
-        content: 'А также явные признаки победы институционализации могут быть объединены в целые кластеры себе подобных.',
-        id:      1,
-    },
-]);
+const notesList = computed(() => $store.getters.getNotesList);
 
 const data = ref({
     email:            null,
     password:         null,
     confirm_password: null,
+});
+
+const newNotes = ref({
+    title:   null,
+    content: null,
 });
 
 const $store = useStore();
@@ -244,7 +309,7 @@ const handleAction = () => {
 
 const sign = async () => {
     if (!data.value.email || !data.value.password) {
-        errorMessage.value = 'Заполните все поля';
+        errorMessage.value = [ 'Заполните все поля' ];
         return;
     }
     
@@ -253,20 +318,21 @@ const sign = async () => {
     
     if (!response.error) {
         openModal.value = false;
+        clearFields(data.value);
         return;
     }
     
-    if (Array.isArray(response.error) && response.error[0]) {
-    
+    if (Array.isArray(response.error) && response.error.length) {
+        errorMessage.value = response.error;
     }
     else {
-        errorMessage.value = 'Произошла ошибка при входе';
+        errorMessage.value = [ 'Произошла ошибка при входе' ];
     }
 };
 
 const register = async () => {
     if (Object.values(data.value).some(val => !val)) {
-        errorMessage.value = 'Заполните все поля';
+        errorMessage.value = [ 'Заполните все поля' ];
         return;
     }
     
@@ -274,18 +340,48 @@ const register = async () => {
     
     
     if (!response.error) {
+        registerForm.value = false;
+        clearFields(data.value);
         return;
     }
     
-    if (Array.isArray(response.error) && response.error[0]) {
-    
+    if (Array.isArray(response.error) && response.error.length) {
+        errorMessage.value = response.error;
     }
     else {
-        errorMessage.value = 'Произошла ошибка при входе';
+        errorMessage.value = [ 'Произошла ошибка при регистрации' ];
     }
 };
 
-const deleteNotes = (id, index) => {
-    notesList.value.splice(index, 1);
+const addNotice = async () => {
+    if (Object.values(newNotes.value).some(val => !val)) {
+        return;
+    }
+    
+    const response = await $store.dispatch('createNotes', { ...newNotes.value });
+    
+    if (!response.error) {
+        openAddDialog.value = false;
+        clearFields(newNotes.value);
+        return;
+    }
+    
+    if (Array.isArray(response.error) && response.error.length) {
+        errorMessageAdd.value = response.error;
+        console.log(errorMessageAdd.value);
+    }
+    else {
+        errorMessageAdd.value = [ 'Произошла ошибка при добавлении' ];
+    }
+};
+
+const deleteNotes = async (id, index) => {
+    await $store.dispatch('deleteNotes', { id, index });
+};
+
+const clearFields = (obj) => {
+    for (const key of Object.keys(obj)) {
+        obj[key] = null;
+    }
 };
 </script>

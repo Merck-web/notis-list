@@ -14,6 +14,7 @@ onMounted(async () => {
     if (!!checkToken) {
         await $store.dispatch('setToken', checkToken);
         await $store.dispatch('getInfo');
+        await $store.dispatch('getNotes');
     }
 })
 </script>

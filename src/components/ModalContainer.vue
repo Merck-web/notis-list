@@ -3,10 +3,13 @@
         <div
             v-if="isOpen"
             class="modal-container"
-            :class="{
-                'modal-container--show': isVisible,
-                'modal-container--hide': !isVisible,
-            }"
+            :class="[
+                {
+                    'modal-container--show': isVisible,
+                    'modal-container--hide': !isVisible,
+                },
+                className
+            ]"
             :style="{
                 zIndex: zIndex,
             }"
@@ -78,6 +81,10 @@ const props = defineProps({
     width:      {
         type:    String,
         default: '540px',
+    },
+    className: {
+        type:    String,
+        default: '',
     },
 });
 
