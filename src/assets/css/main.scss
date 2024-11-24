@@ -1,0 +1,109 @@
+@import "fonts";
+@import "variables";
+@import "shortcuts";
+
+@import "pages/main-page";
+
+html {
+    font-family:         "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight:         normal;
+    font-style:          normal;
+    font-size:           16px;
+}
+
+body {
+    margin:           0;
+    background-color: $dark;
+}
+
+h1, h2, h3, h4, h5, p {
+    margin: 0;
+    color:  $white;
+}
+
+h1 {
+    font-weight: 900;
+    font-size:   6.5rem;
+    line-height: 100%;
+}
+
+h2 {
+    font-weight: 600;
+    font-size:   3rem;
+    line-height: 150%;
+}
+
+h3 {
+    font-weight: 400;
+    font-size:   2rem;
+    line-height: 150%;
+}
+
+h4 {
+    font-weight: 600;
+    font-size:   1.5rem;
+    line-height: 133%;
+}
+
+.text-normal {
+    font-weight: 500;
+    font-size:   1.25rem;
+    line-height: 160%;
+}
+
+.text-small {
+    font-weight: 400;
+    font-size:   1.125rem;
+    line-height: 156%;
+}
+
+.text-small-bold {
+    font-weight: 700;
+    font-size:   1.125rem;
+    line-height: 156%;
+}
+
+.container {
+    max-width: 1620px;
+    width:     100%;
+    margin:    0 auto;
+    padding:   0 10px;
+}
+
+.button-default {
+    background-color: $green-light;
+    padding:          12px 24px;
+    border-radius:    32px;
+    color:            $white;
+    outline:          none;
+    border:           none;
+
+    display:          flex;
+    align-items:      center;
+    justify-content:  space-between;
+
+    transition:       background-color .2s ease-in-out;
+
+    &:hover {
+        background-color: $green-middle;
+    }
+
+    &:active {
+        background-color: $green-dark;
+    }
+
+    &:disabled {
+        background-color: $gray;
+    }
+
+    img {
+        margin-right: 12px;
+    }
+
+    @extend .text-normal, .pointer;
+}
+
+.text-gray {
+    color: $gray;
+}

@@ -1,0 +1,25 @@
+.main-page {
+    min-height: 100vh;
+    overflow-y: hidden;
+
+    header {
+        padding: 43px 0;
+    }
+
+    &__content {
+        height: calc(100vh - 144px);
+        @extend .row, .items-center, .justify-between;
+
+        &--text {
+            h1 {
+                margin-bottom: 40px;
+            }
+        }
+
+        &--img {
+            max-width:  897px;
+            max-height: 864px;
+            width:      100%;
+        }
+    }
+}
