@@ -8,10 +8,14 @@
                 alt="Логотип"
             />
             
-            <button class="button-default">
+            <button
+                class="button-default"
+                @click="openSign"
+            >
                 <img
                     src="/icons/sign.svg"
                     alt="Иконка войти"
+                    class="button-default-img"
                 />
                 
                 Вход
@@ -36,12 +40,26 @@
                 alt="Главная картинка"
             />
         </div>
+        
+        <ModalContainer
+            v-model="openModal"
+            title="Вход в ваш аккаунт"
+            width="840px"
+        />
     </div>
 </template>
 
-<script>
-export default {
-    name: 'MainPage',
+<script
+    setup
+>
+
+import { ref } from 'vue';
+import ModalContainer from '@/components/ModalContainer.vue';
+
+const openModal = ref(false);
+
+const openSign = () => {
+    openModal.value = !openModal.value;
 };
 </script>
 

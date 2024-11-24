@@ -1,25 +1,56 @@
 .main-page {
     min-height: 100vh;
     overflow-y: hidden;
+    position:   relative;
 
     header {
-        padding: 43px 0;
+        position:         relative;
+        z-index:          1;
+        padding:          43px 0;
+        background-color: $dark;
     }
 
     &__content {
-        height: calc(100vh - 144px);
+        height:     calc(100vh - 144px);
         @extend .row, .items-center, .justify-between;
 
         &--text {
             h1 {
                 margin-bottom: 40px;
             }
+
+            h3 {
+                @media (max-width: $md) {
+                    margin-bottom: 17px;
+                }
+            }
+
+            @media (max-width: $md) {
+                text-align: center;
+            }
         }
 
         &--img {
             max-width:  897px;
-            max-height: 864px;
+            max-height: 800px;
             width:      100%;
+            margin-top: auto;
+
+            @media (max-width: $md) {
+                margin-top: 0;
+
+            }
         }
+
+        @media (max-width: $md) {
+            justify-content: flex-start;
+            flex-direction:  column;
+            height:          auto;
+            min-height:      unset;
+        }
+    }
+
+    @media (max-width: $md) {
+        overflow-y: auto;
     }
 }

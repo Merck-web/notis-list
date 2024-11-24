@@ -4,6 +4,8 @@
 
 @import "pages/main-page";
 
+@import "components/modal-container";
+
 html {
     font-family:         "Montserrat", sans-serif;
     font-optical-sizing: auto;
@@ -26,6 +28,10 @@ h1 {
     font-weight: 900;
     font-size:   6.5rem;
     line-height: 100%;
+
+    @media (max-width: $xs) {
+        font-size: 3.750rem;
+    }
 }
 
 h2 {
@@ -37,7 +43,11 @@ h2 {
 h3 {
     font-weight: 400;
     font-size:   2rem;
+
     line-height: 150%;
+    @media (max-width: $xs) {
+        font-size: 1.5rem;
+    }
 }
 
 h4 {
@@ -85,6 +95,18 @@ h4 {
 
     transition:       background-color .2s ease-in-out;
 
+    &-circle {
+        border-radius:   50%;
+        padding:         0;
+        width:           56px;
+        height:          56px;
+        justify-content: center;
+    }
+
+    &-img {
+        margin-right: 12px;
+    }
+
     &:hover {
         background-color: $green-middle;
     }
@@ -95,10 +117,6 @@ h4 {
 
     &:disabled {
         background-color: $gray;
-    }
-
-    img {
-        margin-right: 12px;
     }
 
     @extend .text-normal, .pointer;
