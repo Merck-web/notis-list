@@ -80,4 +80,29 @@
     @media (max-width: $md) {
         overflow-y: auto;
     }
+
+    .user-info {
+        .text-small {
+            @media (max-width: $xs) {
+                display: none;
+            }
+        }
+
+    }
+
+    &__user {
+        img {
+            @media (max-width: $xs) {
+                width:  36px;
+                height: 36px;
+            }
+        }
+    }
+
+    &__logo {
+        @media (max-width: $xs) {
+            width:  154px;
+            height: 36px;
+        }
+    }
 }

@@ -4,6 +4,7 @@
     >
         <header class="row items-center justify-between">
             <img
+                class="main-page__logo"
                 src="/icons/logo.svg"
                 alt="Логотип"
             />
@@ -51,27 +52,41 @@
             </div>
         </header>
         
-        
-        <div
-            v-if="!isAuth"
-            class="main-page__content"
-        >
-            <div class="main-page__content--text">
-                <h1>
-                    Мои <br> заметки
-                </h1>
+        <TransitionDefault>
+            <div
+                v-if="!isAuth"
+                class="main-page__content"
+            >
+                <div class="main-page__content--text">
+                    <h1>
+                        Мои <br> заметки
+                    </h1>
+                    
+                    <h3 class="text-gray">
+                        Не забывай о важном, <br> храни его в облаке.
+                    </h3>
+                </div>
                 
-                <h3 class="text-gray">
-                    Не забывай о важном, <br> храни его в облаке.
-                </h3>
+                <img
+                    class="main-page__content--img"
+                    src="/images/main-img.png"
+                    alt="Главная картинка"
+                />
             </div>
             
-            <img
-                class="main-page__content--img"
-                src="/images/main-img.png"
-                alt="Главная картинка"
-            />
-        </div>
+            <div
+                v-else
+                class="notes-list"
+            >
+                <NotesCard
+                    v-for="(item, index) in notesList"
+                    :key="item.id"
+                    :item="item"
+                    @delete="id => deleteNotes(id, index)"
+                />
+            </div>
+        </TransitionDefault>
+        
         
         <ModalContainer
             v-model="openModal"
@@ -171,6 +186,7 @@ import ModalContainer from '@/components/ModalContainer.vue';
 import InputDefault from '@/components/InputDefault.vue';
 import { useStore } from 'vuex';
 import TransitionDefault from '@/components/TransitionDefault.vue';
+import NotesCard from '@/components/NotesCard.vue';
 
 const openModal = ref(false);
 const visiblePassword = ref(false);
@@ -178,6 +194,24 @@ const visiblePasswordConfirm = ref(false);
 const errorMessage = ref('');
 const registerForm = ref(false);
 const openMenu = ref(false);
+
+const notesList = ref([
+    {
+        title:   'Заголовок',
+        content: 'А также явные признаки победы институционализации могут быть объединены в целые кластеры себе подобных.',
+        id:      1,
+    },
+    {
+        title:   'Пример заголовока заметки в две строчки',
+        content: 'Не следует, однако, забывать, что базовый вектор развития предопределяет высокую востребованность позиций, занимаемых участниками в отношении поставленных задач. Вот вам яркий пример современных тенденций — повышение уровня гражданского сознания требует анализа переосмысления внешнеэкономических политик.',
+        id:      1,
+    },
+    {
+        title:   'Заголовок',
+        content: 'А также явные признаки победы институционализации могут быть объединены в целые кластеры себе подобных.',
+        id:      1,
+    },
+]);
 
 const data = ref({
     email:            null,
@@ -249,5 +283,9 @@ const register = async () => {
     else {
         errorMessage.value = 'Произошла ошибка при входе';
     }
+};
+
+const deleteNotes = (id, index) => {
+    notesList.value.splice(index, 1);
 };
 </script>
