@@ -74,7 +74,7 @@
                 </template>
             </InputDefault>
             
-            <div class="row items-center justify-between">
+            <div class="row items-center justify-between mb-md">
                 <span
                     class="text-small text-gray"
                 >
@@ -85,9 +85,17 @@
                 
                 <button
                     class="button-default"
+                    @click="sign"
                 >
                     Войти
                 </button>
+            </div>
+            
+            <div
+                v-if="errorMessage"
+                class="row negative-banner full-width"
+            >
+                {{ errorMessage }}
             </div>
         </ModalContainer>
     </div>
@@ -100,19 +108,37 @@
 import { ref } from 'vue';
 import ModalContainer from '@/components/ModalContainer.vue';
 import InputDefault from '@/components/InputDefault.vue';
+import { useStore } from 'vuex';
 
 const openModal = ref(false);
 const visiblePassword = ref(false);
+const errorMessage = ref('');
+
 const data = ref({
     email:    null,
     password: null,
 });
 
+const $store = useStore();
+
 const openSign = () => {
     openModal.value = !openModal.value;
 };
+
+const sign = async () => {
+    if (!data.value.email || !data.value.password) {
+        errorMessage.value = 'Заполните все поля';
+        return;
+    }
+    
+    const response = await $store.dispatch('login', { ...data.value });
+    
+    
+    if (response.error && Array.isArray(response.error) && response.error[0]) {
+        errorMessage.value = response.error[0];
+    }
+    else {
+        errorMessage.value = 'Произошла ошибка при входе';
+    }
+};
 </script>
-
-<style scoped>
-
-</style>
