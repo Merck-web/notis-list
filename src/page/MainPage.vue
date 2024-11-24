@@ -43,7 +43,7 @@
         
         <ModalContainer
             v-model="openModal"
-            title="Вход в ваш аккаунт"
+            :title="isNewUser ? 'Регистрация' : 'Вход в ваш аккаунт'"
             width="840px"
         >
             <InputDefault
@@ -58,7 +58,7 @@
                 v-model="data.password"
                 label="Пароль"
                 placeholder="Введите пароль"
-                class="mb-40"
+                :class="isNewUser ? 'mb-md' : 'mb-40'"
                 :type="visiblePassword ? 'text' : 'password'"
                 :rules="[ val => !!val || 'Обязательное поле' ]"
             >
@@ -74,20 +74,46 @@
                 </template>
             </InputDefault>
             
+            
+            <InputDefault
+                v-if="isNewUser"
+                v-model="data.confirm_password"
+                label="Пароль еще раз"
+                placeholder="Введите пароль"
+                class="mb-40"
+                :type="visiblePasswordConfirm ? 'text' : 'password'"
+                :rules="[ val => !!val || 'Обязательное поле' ]"
+            >
+                <template
+                    v-slot:append
+                >
+                    <img
+                        src="/icons/eye.svg"
+                        alt="Глаз"
+                        class="pointer"
+                        @click="visiblePasswordConfirm = !visiblePasswordConfirm"
+                    >
+                </template>
+            </InputDefault>
+            
             <div class="row items-center justify-between mb-md">
                 <span
                     class="text-small text-gray"
                 >
                     У вас нет аккаунта?
                     
-                    <a>Зарегистрируйтесь</a>
+                    <a
+                        @click="registerForm = !registerForm"
+                    >
+                        {{ isNewUser ? 'Войдите' : 'Зарегистрируйтесь' }}
+                    </a>
                 </span>
                 
                 <button
                     class="button-default"
-                    @click="sign"
+                    @click="handleAction"
                 >
-                    Войти
+                    {{ isNewUser ? 'Зарегистрироваться' : 'Войти' }}
                 </button>
             </div>
             
@@ -105,24 +131,43 @@
     setup
 >
 
-import { ref } from 'vue';
+import {
+    computed,
+    ref,
+} from 'vue';
 import ModalContainer from '@/components/ModalContainer.vue';
 import InputDefault from '@/components/InputDefault.vue';
 import { useStore } from 'vuex';
 
 const openModal = ref(false);
 const visiblePassword = ref(false);
+const visiblePasswordConfirm = ref(false);
 const errorMessage = ref('');
+const registerForm = ref(false);
 
 const data = ref({
-    email:    null,
-    password: null,
+    email:            null,
+    password:         null,
+    confirm_password: null,
 });
 
 const $store = useStore();
 
 const openSign = () => {
     openModal.value = !openModal.value;
+};
+
+const isNewUser = computed(() => {
+    return registerForm.value;
+});
+
+const handleAction = () => {
+    if (isNewUser.value) {
+        register();
+    }
+    else {
+        sign();
+    }
 };
 
 const sign = async () => {
@@ -134,8 +179,33 @@ const sign = async () => {
     const response = await $store.dispatch('login', { ...data.value });
     
     
-    if (response.error && Array.isArray(response.error) && response.error[0]) {
-        errorMessage.value = response.error[0];
+    if (!response.error) {
+        return;
+    }
+    
+    if (Array.isArray(response.error) && response.error[0]) {
+    
+    }
+    else {
+        errorMessage.value = 'Произошла ошибка при входе';
+    }
+};
+
+const register = async () => {
+    if (Object.values(data.value).some(val => !val)) {
+        errorMessage.value = 'Заполните все поля';
+        return;
+    }
+    
+    const response = await $store.dispatch('register', { ...data.value });
+    
+    
+    if (!response.error) {
+        return;
+    }
+    
+    if (Array.isArray(response.error) && response.error[0]) {
+    
     }
     else {
         errorMessage.value = 'Произошла ошибка при входе';

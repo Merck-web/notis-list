@@ -6,7 +6,12 @@ function auth(request) {
    return axios.post('/api/auth', request)
 }
 
+function register(request) {
+   return axios.post('/api/reg', request)
+}
+
 
 export default {
    auth,
+   register,
 }
