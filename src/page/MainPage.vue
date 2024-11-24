@@ -12,6 +12,8 @@
             <button
                 v-if="!isAuth"
                 class="button-default"
+                aria-label="Войти в аккаунт"
+                title="Войти в аккаунт"
                 @click="openSign"
             >
                 <img
@@ -36,6 +38,8 @@
                         src="/icons/account.svg"
                         alt="Иконка пользователя"
                         class="pointer"
+                        aria-expanded="openMenu"
+                        role="button"
                         @click="openMenu = !openMenu"
                     >
                     
@@ -43,6 +47,8 @@
                         <div
                             v-if="openMenu"
                             class="main-page__logout"
+                            role="menuitem"
+                            aria-label="Выйти из аккаунта"
                             @click="logout"
                         >
                             <a>Выйти</a>
@@ -77,11 +83,13 @@
             <div
                 v-else
                 class="notes-list"
+                role="list"
             >
                 <NotesCard
                     v-for="(item, index) in notesList"
                     :key="item.id"
                     :item="item"
+                    role="listitem"
                     @delete="id => deleteNotes(id, index)"
                 />
             </div>
@@ -91,6 +99,8 @@
             <button
                 v-if="isAuth"
                 class="button-default button-default-circle main-page__add-btn"
+                aria-label="Добавить новую заметку"
+                title="Добавить заметку"
                 @click="openAddDialog = true"
             >
                 <img
@@ -112,6 +122,8 @@
                 placeholder="Введите значение"
                 class="mb-md"
                 :rules="[ val => !!val || 'Обязательное поле' ]"
+                aria-required="true"
+                aria-describedby="note-email-helper"
             />
             
             <InputDefault
@@ -121,6 +133,8 @@
                 :class="isNewUser ? 'mb-md' : 'mb-40'"
                 :type="visiblePassword ? 'text' : 'password'"
                 :rules="[ val => !!val || 'Обязательное поле' ]"
+                aria-required="true"
+                aria-describedby="note-password-helper"
             >
                 <template
                     v-slot:append
@@ -134,6 +148,9 @@
                 </template>
             </InputDefault>
             
+            <p id="note-password-helper" class="sr-only">
+                Введите password. Максимальная длина 100 символов.
+            </p>
             
             <InputDefault
                 v-if="isNewUser"
@@ -143,6 +160,8 @@
                 class="mb-40"
                 :type="visiblePasswordConfirm ? 'text' : 'password'"
                 :rules="[ val => !!val || 'Обязательное поле' ]"
+                aria-required="true"
+                aria-describedby="note-confirm_password-helper"
             >
                 <template
                     v-slot:append
@@ -155,6 +174,10 @@
                     >
                 </template>
             </InputDefault>
+            
+            <p id="note-confirm_password-helper" class="sr-only">
+                Введите confirm_password. Максимальная длина 100 символов.
+            </p>
             
             <div class="row items-center justify-between mb-md">
                 <span
@@ -171,6 +194,8 @@
                 
                 <button
                     class="button-default"
+                    :aria-label="isNewUser ? 'Зарегистрироваться' : 'Войти'"
+                    :title="isNewUser ? 'Зарегистрироваться' : 'Войти'"
                     @click="handleAction"
                 >
                     {{ isNewUser ? 'Зарегистрироваться' : 'Войти' }}
@@ -208,7 +233,12 @@
                 counter
                 :maxlength="100"
                 :rules="[ val => !!val || 'Обязательное поле' ]"
+                aria-required="true"
+                aria-describedby="note-title-helper"
             />
+            <p id="note-title-helper" class="sr-only">
+                Введите название заметки. Максимальная длина 100 символов.
+            </p>
             
             <InputDefault
                 v-model="newNotes.content"
@@ -220,7 +250,13 @@
                 counter
                 class="text-notice"
                 :rules="[ val => !!val || 'Обязательное поле' ]"
+                aria-required="true"
+                aria-describedby="note-text-helper"
             />
+            
+            <p id="note-text-helper" class="sr-only">
+                Введите текст заметки. Максимальная длина 255 символов.
+            </p>
             
             <div
                 v-if="errorMessageAdd.length"
@@ -243,6 +279,8 @@
             >
                 <button
                     class="button-default button-default-add"
+                    aria-label="Добавить заметку"
+                    title="Добавить"
                     @click="addNotice"
                 >
                     Добавить

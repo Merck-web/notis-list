@@ -3,6 +3,10 @@
         <div
             v-if="isOpen"
             class="modal-container"
+            aria-modal="true"
+            role="dialog"
+            :aria-labelledby="title"
+            :aria-describedby="`modal-description ${title}`"
             :class="[
                 {
                     'modal-container--show': isVisible,
@@ -27,6 +31,8 @@
                     >
                         <button
                             class="button-default button-default-circle"
+                            aria-label="Закрыть окно"
+                            title="Закрыть"
                             @click="hide"
                         >
                             <img
@@ -51,6 +57,10 @@
                     <slot name="append"/>
                 </div>
             </div>
+            
+            <p :id="`modal-description ${title}`" class="sr-only">
+               Данные модального окна
+            </p>
         </div>
     </Teleport>
 </template>
