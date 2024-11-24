@@ -43,7 +43,7 @@
                         <div
                             v-if="openMenu"
                             class="main-page__logout"
-                            @click="$store.dispatch('logout')"
+                            @click="logout"
                         >
                             <a>Выйти</a>
                         </div>
@@ -89,6 +89,7 @@
         
         <TransitionDefault>
             <button
+                v-if="isAuth"
                 class="button-default button-default-circle main-page__add-btn"
                 @click="openAddDialog = true"
             >
@@ -215,6 +216,7 @@
                 placeholder="Введите текст"
                 type="text"
                 autogrow
+                :maxlength="255"
                 counter
                 class="text-notice"
                 :rules="[ val => !!val || 'Обязательное поле' ]"
@@ -236,7 +238,9 @@
             
             </div>
             
-            <div class="row justify-end">
+            <div
+                class="row justify-end"
+            >
                 <button
                     class="button-default button-default-add"
                     @click="addNotice"
@@ -299,6 +303,8 @@ const isAuth = computed(() => {
 });
 
 const handleAction = () => {
+    errorMessage.value = [];
+    
     if (isNewUser.value) {
         register();
     }
@@ -378,6 +384,11 @@ const addNotice = async () => {
 const deleteNotes = async (id, index) => {
     await $store.dispatch('deleteNotes', { id, index });
 };
+
+const logout = () => {
+    openMenu.value = false;
+    $store.dispatch('logout');
+}
 
 const clearFields = (obj) => {
     for (const key of Object.keys(obj)) {

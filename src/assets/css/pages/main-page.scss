@@ -67,6 +67,13 @@
         background-color: $dark-middle;
         border-radius:    12px;
 
+        @media (max-width: $xs) {
+            left:             -80px;
+            bottom:           calc((117px + -8px) * (-1));
+            width:            120px;
+            height:           98px;
+        }
+
         &::after {
             content:       '';
             position:      absolute;
@@ -74,6 +81,10 @@
             top:           -20px;
             border:        10px solid transparent;
             border-bottom: 10px solid $dark-middle;
+
+            @media (max-width: $xs) {
+                right:         13px;
+            }
         }
     }
 
