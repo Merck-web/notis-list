@@ -11,7 +11,7 @@
     }
 
     &__content {
-        height:     calc(100vh - 144px);
+        height: calc(100vh - 144px);
         @extend .row, .items-center, .justify-between;
 
         &--text {
@@ -47,6 +47,33 @@
             flex-direction:  column;
             height:          auto;
             min-height:      unset;
+        }
+    }
+
+    &__user {
+        position: relative;
+    }
+
+    &__logout {
+        position:         absolute;
+        left:             -88px;
+        bottom:           calc((117px + 16px) * (-1));
+        display:          flex;
+        justify-content:  center;
+        align-items:      center;
+        width:            145px;
+        height:           117px;
+        box-shadow:       0 15px 46px -10px rgba(0, 0, 0, 0.6);
+        background-color: $dark-middle;
+        border-radius:    12px;
+
+        &::after {
+            content:       '';
+            position:      absolute;
+            right:         20px;
+            top:           -20px;
+            border:        10px solid transparent;
+            border-bottom: 10px solid $dark-middle;
         }
     }
 

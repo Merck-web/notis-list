@@ -8,15 +8,23 @@ export default createStore({
     },
     getters:   {
         isAuth: state => Object.keys(state.personalInfo).length,
+        
+        getPersonalInfo: state => state.personalInfo,
     },
     mutations: {
+        LOGOUT: (state) => {
+            state.personalInfo = {};
+            localStorage.removeItem('token');
+            axios.defaults.headers.common['Authorization'] = '';
+        },
+        
         SET_TOKEN: (state, token) => {
             localStorage.setItem('token', token);
             axios.defaults.headers.common['Authorization'] = `Bearer ${ token }`;
         },
         
         SET_PERSONAL_DATA: (state, payload) => {
-            state.personalInfo = payload
+            state.personalInfo = payload;
         },
     },
     actions:   {
@@ -65,6 +73,18 @@ export default createStore({
             try {
                 const { data } = await api.getInfo();
                 commit('SET_PERSONAL_DATA', data);
+                return data;
+            }
+            catch (error) {
+                console.error(error);
+            }
+        },
+        
+        async logout({ commit }) {
+            try {
+                const { data } = await api.logout();
+                console.log(data);
+                commit('LOGOUT');
                 return data;
             }
             catch (error) {

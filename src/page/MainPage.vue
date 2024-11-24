@@ -9,6 +9,7 @@
             />
             
             <button
+                v-if="!isAuth"
                 class="button-default"
                 @click="openSign"
             >
@@ -20,10 +21,41 @@
                 
                 Вход
             </button>
+            
+            <div
+                v-else
+                class="user-info row items-center"
+            >
+                <p class="text-small mr-xs">
+                    {{ $store.getters.getPersonalInfo.email }}
+                </p>
+                
+                <div class="main-page__user">
+                    <img
+                        src="/icons/account.svg"
+                        alt="Иконка пользователя"
+                        class="pointer"
+                        @click="openMenu = !openMenu"
+                    >
+                    
+                    <TransitionDefault>
+                        <div
+                            v-if="openMenu"
+                            class="main-page__logout"
+                            @click="$store.dispatch('logout')"
+                        >
+                            <a>Выйти</a>
+                        </div>
+                    </TransitionDefault>
+                </div>
+            </div>
         </header>
         
         
-        <div class="main-page__content">
+        <div
+            v-if="!isAuth"
+            class="main-page__content"
+        >
             <div class="main-page__content--text">
                 <h1>
                     Мои <br> заметки
@@ -138,12 +170,14 @@ import {
 import ModalContainer from '@/components/ModalContainer.vue';
 import InputDefault from '@/components/InputDefault.vue';
 import { useStore } from 'vuex';
+import TransitionDefault from '@/components/TransitionDefault.vue';
 
 const openModal = ref(false);
 const visiblePassword = ref(false);
 const visiblePasswordConfirm = ref(false);
 const errorMessage = ref('');
 const registerForm = ref(false);
+const openMenu = ref(false);
 
 const data = ref({
     email:            null,
@@ -159,6 +193,10 @@ const openSign = () => {
 
 const isNewUser = computed(() => {
     return registerForm.value;
+});
+
+const isAuth = computed(() => {
+    return $store.getters.isAuth;
 });
 
 const handleAction = () => {
@@ -180,6 +218,7 @@ const sign = async () => {
     
     
     if (!response.error) {
+        openModal.value = false;
         return;
     }
     
